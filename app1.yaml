@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app1-deployment
+  namespace: roboshop
+  labels:
+    project: personal
+    purpose: ingress
+    app: app1
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      project: personal
+      purpose: ingress
+      app: app1
+  template:
+    metadata:
+      labels:
+        project: personal
+        purpose: ingress
+        app: app1
+    spec:
+      containers:
+        - name: app1
+          image: anuragbojja/app1:v1
+          ports:
+            - containerPort: 80
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app1
+  namespace: roboshop
+  labels:
+    project: personal
+    purpose: ingress
+    app: app1
+spec:
+  selector:
+    project: personal
+    purpose: ingress
+    app: app1
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 80
