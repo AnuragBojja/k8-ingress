@@ -46,3 +46,37 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: app1 
+  annotations:
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTPS": 443}]'
+    alb.ingress.kubernetes.io/certificate-arn: arn:aws:acm:us-east-1:793770371113:certificate/68684e54-2268-4a53-b47c-33abcdedfcd2
+    alb.ingress.kubernetes.io/frontend-nlb-scheme: internet-facing
+    alb.ingress.kubernetes.io/tags: Environment=dev,project=roboshop
+spec:
+  ingressClassName: alb 
+  rules:
+  - host: "app1.anuragaws.shop"
+    http:
+      paths:
+      - pathType: Prefix
+        path: "/"
+        backend:
+          service:
+            name: app1
+            port:
+              number: 80
+  # - host: "*.foo.com"
+  #   http:
+  #     paths:
+  #     - pathType: Prefix
+  #       path: "/foo"
+  #       backend:
+  #         service:
+  #           name: service2
+  #           port:
+  #             number: 80
+---
